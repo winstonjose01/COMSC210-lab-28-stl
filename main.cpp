@@ -11,6 +11,8 @@ int select_goat(list<Goat> trip);
 void delete_goat(list<Goat> &trip);
 void add_goat(list<Goat> &trip, string [], string []);
 void display_trip(list<Goat> trip);
+bool find_goat(list<Goat> &trip, string);
+void replace_goat(list<Goat> &trip, Goat);
 int main_menu();
 
 int main() {
@@ -44,7 +46,7 @@ int main() {
     
     // Goat Manager 3001 Engine
     int sel = main_menu();
-    while (sel != 4) {
+    while (sel != 10) {
         switch (sel) {
             case 1:
                 cout << "Adding a goat.\n";
@@ -57,6 +59,27 @@ int main() {
             case 3:    
                 cout << "Displaying goat data.\n";
                 display_trip(trip);
+                break;
+            case 4: //Find a goat
+                {
+                string name;
+                bool goat_found = false;
+                cin.clear();
+                cout << "Name of the goat you are looking for?: ";
+                cin >> name;
+                cin.ignore();
+                goat_found = find_goat(trip,name);
+                if (goat_found)
+                    cout << name << " is part of the trip\n";
+                else
+                    cout << name << " is not on the goat trip\n";
+                break;
+                }
+            case 5: //Replace a goat
+                break;
+            case 6: //Sort the goat
+                break;
+            case 7: //Replace a goat
                 break;
             default:
                 cout << "Invalid selection.\n";
@@ -74,7 +97,11 @@ int main_menu() {
     cout << "[1] Add a goat\n";
     cout << "[2] Delete a goat\n";
     cout << "[3] List goats\n";
-    cout << "[4] Quit\n";
+    cout << "[4] Find a goat\n"; // 1
+    cout << "[5] Replace a goat\n";    // 2
+    cout << "[6] Replace a goat\n"; // 3
+    cout << "[7] Sort the goats\n"; // 3
+    cout << "[12] Quit\n";
     cout << "Choice --> ";
     int choice;
     cin >> choice;
@@ -126,3 +153,16 @@ int select_goat(list<Goat> trp) {
     }
     return input;
 }
+
+bool find_goat(list<Goat> &trip, string name){
+    for (auto goat : trip){
+        if (goat.get_name() == name)
+            return true;
+    }
+    return false;
+}
+
+void replace_goat(list<Goat> &trip, Goat new_goat){
+    
+}
+
