@@ -19,6 +19,8 @@ void sort_goat(list<Goat> &trip);
 void reverse_goat(list<Goat> &trip);
 void merge_goat_trips(list<Goat> &, list<Goat> &);
 void move_goats(list<Goat> &, list<Goat> &, int);
+void transform_goats(list<Goat> &, list<Goat> &);
+void partition_goats(list<Goat> &, list<Goat> &);
 int main_menu();
 
 int main() {
@@ -72,23 +74,27 @@ int main() {
                 break;
             case 3:    
                 cout << "Displaying goat data.\n";
+                cout << "\nTRIP 1 -->\n";
                 display_trip(trip);
+                cout << "\nTRIP 2 -->\n";
+                display_trip(trip2);
+                cout << endl;
                 break;
             case 4: //Find a goat
                 {
-                string name;
-                bool goat_found = false;
-                cin.clear();
-                cout << "Name of the goat you are looking for?: ";
-                cin >> name;
-                cin.ignore();
-                goat_found = find_goat(trip,name);
-                if (goat_found)
-                    cout << name << " is part of the trip\n";
-                else
-                    cout << name << " is not on the goat trip\n";
-                cout << endl;
-                break;
+                    string name;
+                    bool goat_found = false;
+                    cin.clear();
+                    cout << "Name of the goat you are looking for?: ";
+                    cin >> name;
+                    cin.ignore();
+                    goat_found = find_goat(trip,name);
+                    if (goat_found)
+                        cout << name << " is part of the trip\n";
+                    else
+                        cout << name << " is not on the goat trip\n";
+                    cout << endl;
+                    break;
                 }
             case 5: //Average age of goats on the trip
                 cout << "Average age of goats on the trip\n";
@@ -117,23 +123,44 @@ int main() {
                 break;
             case 9:
                 {
-                int direction, n;
-                cout << "\nMOVING GOATS ";
-                cout << "\nTHERE ARE " << trip.size() << " GOATS IN TRIP-1 AND " << trip2.size() << " GOATS IN TRIP-2";
-                cout << "\nMOVING FROM TRIP-1 OR TRIP-2? (Enter 1 or 2): ";
-                cin >> direction;
-                cin.ignore();
-                cout << "How many goats are moving from Trip-" << direction << "? ";
-                cin >> n;
-                cin.ignore();
-                if (direction == 1)
-                    move_goats(trip,trip2,n);
-                else
-                    move_goats(trip, trip2, n);
-                cout << "\nTHERE ARE NOW " << trip.size() << " GOATS IN TRIP-1 AND " << trip2.size() << " GOATS IN TRIP-2\n";
+                    int direction, n;
+                    cout << "\nMOVING GOATS ";
+                    cout << "\nTHERE ARE " << trip.size() << " GOATS IN TRIP-1 AND " << trip2.size() << " GOATS IN TRIP-2";
+                    cout << "\nMOVING FROM TRIP-1 OR TRIP-2? (Enter 1 or 2): ";
+                    cin >> direction;
+                    cin.ignore();
+                    cout << "How many goats are moving from Trip-" << direction << "? ";
+                    cin >> n;
+                    cin.ignore();
+                    if (direction == 1)
+                        move_goats(trip,trip2,n);
+                    else
+                        move_goats(trip2, trip, n);
+                    cout << "\nTHERE ARE NOW " << trip.size() << " GOATS IN TRIP-1 AND " << trip2.size() << " GOATS IN TRIP-2\n";
+                    cout << endl;
+                    break;
+                }
+            case 10: // All goats had a birthday, increase their age by 1
+                cout << "\nGOATS ON TRIP-1: ";
+                ave_age_goat(trip);
+                cout << "GOATS ON TRIP-2: ";
+                ave_age_goat(trip2);
+                cout << "\n**INCREASING THE AGE OF ALL GOATS BY 1**\n";
+                transform_goats(trip,trip2);
+                cout << "\nGOATS ON TRIP-1 AFTER INCREASING: ";
+                ave_age_goat(trip);
+                cout << "GOATS ON TRIP-2 AFTER INCREASING: ";
+                ave_age_goat(trip2);
+                break;
+            case 11: // Partition the goats, group goats age > 10
+                cout << "\nSEPARATING GOATS WITH AGE > 10\n";
+                partition_goats(trip,trip2);
+                cout << "\nTRIP 2 -->\n";
+                display_trip(trip);
+                cout << "\nTRIP 2 -->\n";
+                display_trip(trip2);
                 cout << endl;
                 break;
-                }
             default:
                 cout << "Invalid selection.\n";
                 break;
@@ -156,6 +183,8 @@ int main_menu() {
     cout << "[7] Reverse the goats\n"; // 4
     cout << "[8] Merge goat trips\n"; // 5
     cout << "[9] Move goats from one trip to another trip\n"; // 6
+    cout << "[10] Birthday goats, Increase their age\n";
+    cout << "[11] Partition the goats\n";
     cout << "[12] Quit\n";
     cout << "Choice --> ";
     int choice;
@@ -249,4 +278,24 @@ void move_goats(list<Goat> &trip_from, list<Goat> &trip_to, int n){
     trip_to.splice(trip_to.end(), trip_from, trip_from.begin(), it);
     cout << "\nGOATS MOVED SUCCESSFULLY!";
 
+}
+
+void transform_goats(list<Goat> &trip, list<Goat> &trip2){
+
+    transform(trip.begin(), trip.end(), trip.begin(), [](Goat &g){
+                                g.set_age(g.get_age() + 1); 
+                                return g; });
+                                
+    transform(trip2.begin(), trip2.end(), trip2.begin(), [](Goat &g2){
+                                g2.set_age(g2.get_age() + 1); 
+                                return g2; });
+
+    cout << "Ages of all goats increased by 1 year.\n";
+}
+
+void partition_goats(list<Goat> &trip, list<Goat> &trip2){
+    
+    partition(trip.begin(), trip.end(), [](Goat &g){return g.get_age() > 10;});
+    partition(trip2.begin(), trip2.end(), [](Goat &g2){return g2.get_age() > 10;});
+    cout << "Goats older than 10 are at the beginning of the list.\n";
 }
