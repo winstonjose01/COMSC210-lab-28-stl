@@ -2,6 +2,8 @@
 #include <fstream>
 #include <iomanip>
 #include <list>
+#include <numeric>
+#include <algorithm>
 #include "Goat.h"
 using namespace std;
 
@@ -12,7 +14,9 @@ void delete_goat(list<Goat> &trip);
 void add_goat(list<Goat> &trip, string [], string []);
 void display_trip(list<Goat> trip);
 bool find_goat(list<Goat> &trip, string);
-void replace_goat(list<Goat> &trip, Goat);
+void ave_age_goat(list<Goat> &trip);
+void sort_goat(list<Goat> &trip);
+void reverse_goat(list<Goat> &trip);
 int main_menu();
 
 int main() {
@@ -73,13 +77,25 @@ int main() {
                     cout << name << " is part of the trip\n";
                 else
                     cout << name << " is not on the goat trip\n";
+                cout << endl;
                 break;
                 }
-            case 5: //Replace a goat
+            case 5: //Average age of goats on the trip
+                cout << "Average age of goats on the trip\n";
+                ave_age_goat(trip);
+                cout << endl;
                 break;
             case 6: //Sort the goat
+                cout << "\nSORTING GOATS";
+                sort_goat(trip);
+                display_trip(trip);
+                cout << endl;
                 break;
             case 7: //Replace a goat
+                cout << "REVERSING GOATS"
+                sort_goat(trip);
+                display_trip(trip);
+                cout << endl;
                 break;
             default:
                 cout << "Invalid selection.\n";
@@ -98,14 +114,14 @@ int main_menu() {
     cout << "[2] Delete a goat\n";
     cout << "[3] List goats\n";
     cout << "[4] Find a goat\n"; // 1
-    cout << "[5] Replace a goat\n";    // 2
-    cout << "[6] Replace a goat\n"; // 3
-    cout << "[7] Sort the goats\n"; // 3
+    cout << "[5] Get average age of goats\n";    // 2
+    cout << "[6] Sort the goats\n"; // 3
+    cout << "[7] Reverse the goats\n"; // 3
     cout << "[12] Quit\n";
     cout << "Choice --> ";
     int choice;
     cin >> choice;
-    while (choice < 1 || choice > 4) {
+    while (choice < 1 || choice > 12) {
         cout << "Invalid, again --> ";
         cin >> choice;
     }
@@ -162,7 +178,21 @@ bool find_goat(list<Goat> &trip, string name){
     return false;
 }
 
-void replace_goat(list<Goat> &trip, Goat new_goat){
-    
+void ave_age_goat(list<Goat> &trip){
+    int total = std::accumulate(trip.begin(), trip.end(), 0,[](int sum, const Goat& goat) {
+                                    return sum + goat.get_age();
+                                });
+    cout << "Average age: " << total/trip.size() << endl;
+}
+
+
+void sort_goat(list<Goat> &trip){
+    trip.sort();
+    cout << endl;
+}
+
+void reverse_goat(list<Goat> &trip){
+    reverse(trip.begin(),trip.end());
+    cout << endl;
 }
 
