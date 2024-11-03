@@ -17,6 +17,8 @@ bool find_goat(list<Goat> &trip, string);
 void ave_age_goat(list<Goat> &trip);
 void sort_goat(list<Goat> &trip);
 void reverse_goat(list<Goat> &trip);
+void merge_goat_trips(list<Goat> &, list<Goat> &);
+void move_goats(list<Goat> &trip, list<Goat> &trip2)
 int main_menu();
 
 int main() {
@@ -37,7 +39,7 @@ int main() {
 
     // create & populate a trip of Goats using std::list of random size 8-15
     int tripSize = rand() % 8 + 8;
-    list<Goat> trip;
+    list<Goat> trip, trip2;
     int age;
     string name, color;
     for (int i = 0; i < tripSize; i++) {
@@ -46,6 +48,14 @@ int main() {
         color = colors[rand() % SZ_COLORS];
         Goat tmp(name, age, color);
         trip.push_back(tmp);
+    }
+
+    for (int i = 0; i < tripSize / 2; i++) {
+        age = rand() % MAX_AGE;  // defined in Goat.h
+        name = names[rand() % SZ_NAMES];
+        color = colors[rand() % SZ_COLORS];
+        Goat tmp(name, age, color);
+        trip2.push_back(tmp);
     }
     
     // Goat Manager 3001 Engine
@@ -92,10 +102,18 @@ int main() {
                 cout << endl;
                 break;
             case 7: //Replace a goat
-                cout << "REVERSING GOATS"
-                sort_goat(trip);
+                cout << "REVERSING GOATS";
+                reverse_goat(trip);
                 display_trip(trip);
                 cout << endl;
+                break;
+            case 8: // Merge goat trip
+                cout << "\nMERGING GOAT TRIPS";
+                cout << "\nTRIP 1 -->\n";
+                display_trip(trip);
+                cout << "\nTRIP 2 -->\n";
+                display_trip(trip2);
+                merge_goat_trips(trip,trip2);
                 break;
             default:
                 cout << "Invalid selection.\n";
@@ -116,7 +134,9 @@ int main_menu() {
     cout << "[4] Find a goat\n"; // 1
     cout << "[5] Get average age of goats\n";    // 2
     cout << "[6] Sort the goats\n"; // 3
-    cout << "[7] Reverse the goats\n"; // 3
+    cout << "[7] Reverse the goats\n"; // 4
+    cout << "[8] Merge goat trips\n"; // 5
+    cout << "[9] Move goats from one trip to another trip\n"; // 6
     cout << "[12] Quit\n";
     cout << "Choice --> ";
     int choice;
@@ -196,3 +216,14 @@ void reverse_goat(list<Goat> &trip){
     cout << endl;
 }
 
+void merge_goat_trips(list<Goat> &trip, list<Goat> &trip2){
+    list <Goat> merged_trip(trip.size() + trip2.size());
+    merge(trip.begin(),trip.end(),trip2.begin(),trip2.end(),merged_trip.begin());
+    cout << "\nMERGED TRIP --> \n";
+    display_trip(merged_trip);
+
+}
+
+void move_goats(list<Goat> &trip, list<Goat> &trip2){
+
+}
