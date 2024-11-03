@@ -18,7 +18,7 @@ void ave_age_goat(list<Goat> &trip);
 void sort_goat(list<Goat> &trip);
 void reverse_goat(list<Goat> &trip);
 void merge_goat_trips(list<Goat> &, list<Goat> &);
-void move_goats(list<Goat> &trip, list<Goat> &trip2)
+void move_goats(list<Goat> &, list<Goat> &, int);
 int main_menu();
 
 int main() {
@@ -60,7 +60,7 @@ int main() {
     
     // Goat Manager 3001 Engine
     int sel = main_menu();
-    while (sel != 10) {
+    while (sel != 12) {
         switch (sel) {
             case 1:
                 cout << "Adding a goat.\n";
@@ -115,6 +115,25 @@ int main() {
                 display_trip(trip2);
                 merge_goat_trips(trip,trip2);
                 break;
+            case 9:
+                {
+                int direction, n;
+                cout << "\nMOVING GOATS ";
+                cout << "\nTHERE ARE " << trip.size() << " GOATS IN TRIP-1 AND " << trip2.size() << " GOATS IN TRIP-2";
+                cout << "\nMOVING FROM TRIP-1 OR TRIP-2? (Enter 1 or 2): ";
+                cin >> direction;
+                cin.ignore();
+                cout << "How many goats are moving from Trip-" << direction << "? ";
+                cin >> n;
+                cin.ignore();
+                if (direction == 1)
+                    move_goats(trip,trip2,n);
+                else
+                    move_goats(trip, trip2, n);
+                cout << "\nTHERE ARE NOW " << trip.size() << " GOATS IN TRIP-1 AND " << trip2.size() << " GOATS IN TRIP-2\n";
+                cout << endl;
+                break;
+                }
             default:
                 cout << "Invalid selection.\n";
                 break;
@@ -224,6 +243,10 @@ void merge_goat_trips(list<Goat> &trip, list<Goat> &trip2){
 
 }
 
-void move_goats(list<Goat> &trip, list<Goat> &trip2){
+void move_goats(list<Goat> &trip_from, list<Goat> &trip_to, int n){
+    auto it = trip_from.begin();
+    advance(it, n);
+    trip_to.splice(trip_to.end(), trip_from, trip_from.begin(), it);
+    cout << "\nGOATS MOVED SUCCESSFULLY!";
 
 }
